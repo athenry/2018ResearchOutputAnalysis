@@ -1,0 +1,42 @@
+---
+title: "University of Alberta Faculty of Engineering Research Metrics"
+author: "Alison Henry"
+date: "January 18, 2018"
+output: word_document
+        df_print: kable
+bibliography: 2018ROA.bib
+csl: chemical-engineering-journal.csl
+params:
+        dataLoc:
+                label: "Location of data files"
+                value: https://drive.google.com/drive/folders/0BzuuY7vK5mRBTmtXeFQ4RDVIYXM?usp=sharing
+                input: text
+        dataSource:
+                label: "Data Source"
+                value: Scopus
+                input: select
+                choices: [Scopus, "Web of Science"]
+---
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+A report to examine the publication output of the Univeristy of Alberta Faculty of Engineering. Searches were conducted using `, and limited to the five publication years from 2012-2016.
+
+```{r package installation}
+##Install and load needed packages
+
+##install.packages("bibliometrix", dependencies = TRUE)
+##install.packages("splitstackshape")
+##install.packages("tidyverse")
+##install.packages("viridis")
+##install.packages("knitr")
+
+library(bibliometrix)
+library(splitstackshape)
+library(tidyverse)
+library(stringr)
+library(viridis)
+library(knitr)
+```
+
