@@ -32,6 +32,7 @@ A report to examine the publication output of the Univeristy of Alberta Faculty 
 ##install.packages("viridis")
 ##install.packages("knitr")
 
+library (googledrive)
 library(bibliometrix)
 library(splitstackshape)
 library(tidyverse)
@@ -40,3 +41,11 @@ library(viridis)
 library(knitr)
 ```
 
+Initial processing of the data was accomplished with the Bibliometrix package written by Massimo Aria and Corrado Cuccurullo[@RefWorks:doc:59d24e48e4b0b590b97a2290]. This allowed easy conversion of records into a data frame to facilitate further processing.
+
+```{r read in bibtex files} 
+## Read in downloaded files and convert to dataframe
+filePaths <- dir("./WoSdata", pattern = "*.bib", recursive = TRUE, full.names = TRUE) 
+D <- do.call("readFiles", as.list(filePaths)) 
+M <- convert2df(D, dbsource = "isi", format = "bibtex")
+```
