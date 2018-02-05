@@ -45,7 +45,10 @@ Initial processing of the data was accomplished with the Bibliometrix package wr
 
 ```{r read in bibtex files} 
 ## Read in downloaded files and convert to dataframe
-filePaths <- dir("./WoSdata", pattern = "*.bib", recursive = TRUE, full.names = TRUE) 
-D <- do.call("readFiles", as.list(filePaths)) 
-M <- convert2df(D, dbsource = "isi", format = "bibtex")
+##filePaths <- dir("./ScopusData", pattern = "*.bib", recursive = TRUE, full.names = TRUE) 
+##D <- do.call("readFiles", as.list(filePaths)) 
+##M <- convert2df(D, dbsource = "scopus", format = "bibtex")
+
+files <- drive_ls(path == params$dataLoc)
+apply(files, 1, drive_download)
 ```
