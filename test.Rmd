@@ -1,25 +1,25 @@
 ---
 title: "University of Alberta Faculty of Engineering Research Metrics"
 author: "Alison Henry"
-date: "January 18, 2018"
+date: "February 13, 2018"
 output: word_document
-        df_print: kable
-bibliography: 2018ROA.bib
-csl: chemical-engineering-journal.csl
-params:
-        dataLoc:
-                label: "Location of data files"
-                value: https://drive.google.com/drive/folders/0BzuuY7vK5mRBTmtXeFQ4RDVIYXM?usp=sharing
-                input: text
-        dataSource:
-                label: "Data Source"
-                value: Scopus
-                input: select
-                choices: [Scopus, "Web of Science"]
+##        df_print: kable
+##bibliography: 2018ROA.bib
+##csl: chemical-engineering-journal.csl
+##params:
+##        dataLoc:
+##              label: "Location of data files"
+##                value: "./data"
+##                input: text
+##        dataSource:
+##                label: "Data Source"
+##                value: Scopus
+##                input: select
+##                choices: [Scopus, "Web of Science"]
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, include = FALSE)
 ```
 A report to examine the publication output of the Univeristy of Alberta Faculty of Engineering. Searches were conducted using `, and limited to the five publication years from 2012-2016.
 
@@ -32,9 +32,7 @@ A report to examine the publication output of the Univeristy of Alberta Faculty 
 ##install.packages("viridis")
 ##install.packages("knitr")
 
-library (googledrive)
 library(bibliometrix)
-library(splitstackshape)
 library(tidyverse)
 library(stringr)
 library(viridis)
@@ -45,10 +43,25 @@ Initial processing of the data was accomplished with the Bibliometrix package wr
 
 ```{r read in bibtex files} 
 ## Read in downloaded files and convert to dataframe
-##filePaths <- dir("./ScopusData", pattern = "*.bib", recursive = TRUE, full.names = TRUE) 
-##D <- do.call("readFiles", as.list(filePaths)) 
-##M <- convert2df(D, dbsource = "scopus", format = "bibtex")
+filePaths <- dir("./data", pattern = "*.bib", recursive = TRUE, full.names = TRUE) 
+D <- do.call("readFiles", as.list(filePaths)) 
+M <- convert2df(D, dbsource = "scopus", format = "bibtex")
 
-files <- drive_ls(path == params$dataLoc)
-apply(files, 1, drive_download)
+##files <- drive_ls(path == params$dataLoc)
+##apply(files, 1, drive_download)
+```
+
+```{r run biblioAnalysis}
+result<-biblioAnalysis(M)
+```
+
+##International Collaborations
+```{r Countries, results=asis}
+# Create a country collaboration network
+M <- metaTagExtraction(M, Field = "AU_CO", sep = ";")
+NetMatrix <- biblioNetwork(M, analysis = "collaboration", network = "countries", sep = ";")
+
+# Plot the network
+net=networkPlot(NetMatrix, n = dim(NetMatrix)[1], Title = "Country Collaboration", type = "circle", size=TRUE, remove.multiple=FALSE,labelsize=0.8)
+net
 ```
